@@ -1,0 +1,80 @@
+make mrproper
+make defconfig
+{
+HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  SHIPPED scripts/kconfig/zconf.tab.c
+  SHIPPED scripts/kconfig/zconf.lex.c
+  SHIPPED scripts/kconfig/zconf.hash.c
+  HOSTCC  scripts/kconfig/zconf.tab.o
+  HOSTLD  scripts/kconfig/conf
+*** Default configuration is based on 'i386_defconfig'
+#
+# configuration written to .config
+#
+}
+make -j4 LANG=en_IN LC_ALL= menuconfig
+{
+HOSTCC  scripts/kconfig/lxdialog/checklist.o
+  HOSTCC  scripts/kconfig/lxdialog/inputbox.o
+  HOSTCC  scripts/kconfig/lxdialog/menubox.o
+  HOSTCC  scripts/kconfig/lxdialog/textbox.o
+  HOSTCC  scripts/kconfig/lxdialog/util.o
+  HOSTCC  scripts/kconfig/lxdialog/yesno.o
+  HOSTCC  scripts/kconfig/mconf.o
+  HOSTLD  scripts/kconfig/mconf
+scripts/kconfig/mconf Kconfig
+
+
+*** End of the configuration.
+*** Execute 'make' to start the build or try 'make help'.
+}
+
+time make -j4 >make.log 2>make_err.log
+{
+real	6m7.409s
+user	20m4.828s
+sys	1m0.608s
+}
+
+time make modules_install >make_modules.log 2>make_modules_err.log
+{
+real	0m0.983s
+user	0m0.296s
+sys	0m0.180s
+}
+
+cp -v arch/x86/boot/bzImage /boot/vmlinuz-3.13.3-lfs-7.5
+{
+'arch/x86/boot/bzImage' -> '/boot/vmlinuz-3.13.3-lfs-7.5'
+}
+
+cp -v System.map /boot/System.map-3.13.3
+{
+'System.map' -> '/boot/System.map-3.13.3'
+}
+
+cp -v .config /boot/config-3.13.3
+{
+'.config' -> '/boot/config-3.13.3'
+}
+
+install -d /usr/share/doc/linux-3.13.3
+cp -r Documentation/* /usr/share/doc/linux-3.13.3
+
+cd ..
+chown -R 0:0 linux-3.13.3
+
+cd linux-3.13.3
+
+
+install -v -m755 -d /etc/modprobe.d
+{
+install: creating directory '/etc/modprobe.d'
+}
+cat > /etc/modprobe.d/usb.conf << "EOF"
+# Begin /etc/modprobe.d/usb.conf
+install ohci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i ohci_hcd ; true
+install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
+# End /etc/modprobe.d/usb.conf
+EOF

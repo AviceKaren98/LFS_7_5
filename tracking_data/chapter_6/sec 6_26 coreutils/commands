@@ -1,0 +1,113 @@
+patch -Np1 -i ../coreutils-8.22-i18n-4.patch
+{
+patching file lib/linebuffer.h
+patching file src/cut.c
+patching file src/expand.c
+patching file src/fold.c
+patching file src/join.c
+patching file src/pr.c
+patching file src/sort.c
+patching file src/unexpand.c
+patching file src/uniq.c
+patching file tests/local.mk
+patching file tests/misc/cut.pl
+patching file tests/misc/expand.pl
+patching file tests/misc/fold.pl
+patching file tests/misc/join.pl
+patching file tests/misc/sort-mb-tests.sh
+patching file tests/misc/sort-merge.pl
+patching file tests/misc/sort.pl
+patching file tests/misc/unexpand.pl
+patching file tests/misc/uniq.pl
+patching file tests/pr/pr-tests.pl
+patching file Makefile.in
+}
+
+FORCE_UNSAFE_CONFIGURE=1 ./configure \
+--prefix=/usr \
+--enable-no-install-program=kill,uptime
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m27.696s
+user	1m28.652s
+sys	0m4.468s
+}
+
+time make NON_ROOT_USERNAME=nobody check-root >make_check_1.log 2>make_check_1_err.log
+{
+real	0m7.515s
+user	0m2.516s
+sys	0m0.568s
+}
+
+echo "dummy:x:1000:nobody" >> /etc/group
+chown -Rv nobody .
+
+su nobody -s /bin/bash \
+-c "PATH=$PATH make RUN_EXPENSIVE_TESTS=yes check"
+{output is in make_check.log}
+
+sed -i '/dummy/d' /etc/group
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m2.117s
+user	0m1.276s
+sys	0m0.168s
+}
+
+
+mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
+{
+'/usr/bin/cat' -> '/bin/cat'
+'/usr/bin/chgrp' -> '/bin/chgrp'
+'/usr/bin/chmod' -> '/bin/chmod'
+'/usr/bin/chown' -> '/bin/chown'
+'/usr/bin/cp' -> '/bin/cp'
+'/usr/bin/date' -> '/bin/date'
+'/usr/bin/dd' -> '/bin/dd'
+'/usr/bin/df' -> '/bin/df'
+'/usr/bin/echo' -> '/bin/echo'
+}
+
+mv -v /usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
+{
+'/usr/bin/false' -> '/bin/false'
+'/usr/bin/ln' -> '/bin/ln'
+'/usr/bin/ls' -> '/bin/ls'
+'/usr/bin/mkdir' -> '/bin/mkdir'
+'/usr/bin/mknod' -> '/bin/mknod'
+'/usr/bin/mv' -> '/bin/mv'
+'/usr/bin/pwd' -> '/bin/pwd'
+'/usr/bin/rm' -> '/bin/rm'
+}
+
+mv -v /usr/bin/{rmdir,stty,sync,true,uname,test,[} /bin
+{
+'/usr/bin/rmdir' -> '/bin/rmdir'
+'/usr/bin/stty' -> '/bin/stty'
+'/usr/bin/sync' -> '/bin/sync'
+'/usr/bin/true' -> '/bin/true'
+'/usr/bin/uname' -> '/bin/uname'
+'/usr/bin/test' -> '/bin/test'
+'/usr/bin/[' -> '/bin/['
+}
+
+mv -v /usr/bin/chroot /usr/sbin
+{
+'/usr/bin/chroot' -> '/usr/sbin/chroot'
+}
+
+mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
+{
+'/usr/share/man/man1/chroot.1' -> '/usr/share/man/man8/chroot.8'
+}
+sed -i s/\"1\"/\"8\"/1 /usr/share/man/man8/chroot.8
+
+mv -v /usr/bin/{head,sleep,nice} /bin
+{
+'/usr/bin/head' -> '/bin/head'
+'/usr/bin/sleep' -> '/bin/sleep'
+'/usr/bin/nice' -> '/bin/nice'
+}

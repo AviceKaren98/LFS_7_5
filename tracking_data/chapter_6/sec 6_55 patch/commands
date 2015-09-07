@@ -1,0 +1,22 @@
+./configure --prefix=/usr
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m3.908s
+user	0m9.628s
+sys	0m0.568s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m4.100s
+user	0m0.500s
+sys	0m0.384s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.328s
+user	0m0.160s
+sys	0m0.020s
+}

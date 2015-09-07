@@ -1,0 +1,15 @@
+./configure --prefix=/usr --sysconfdir=/etc
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m2.409s
+user	0m7.648s
+sys	0m0.420s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.027s
+user	0m0.008s
+sys	0m0.004s
+}

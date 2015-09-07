@@ -1,0 +1,42 @@
+./configure --prefix=/usr --docdir=/usr/share/doc/xz-5.0.5
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m9.708s
+user	0m26.888s
+sys	0m2.272s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m13.188s
+user	0m7.024s
+sys	0m1.288s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.077s
+user	0m0.492s
+sys	0m0.064s
+}
+
+mv -v /usr/bin/{lzma,unlzma,lzcat,xz,unxz,xzcat} /bin
+{
+'/usr/bin/lzma' -> '/bin/lzma'
+'/usr/bin/unlzma' -> '/bin/unlzma'
+'/usr/bin/lzcat' -> '/bin/lzcat'
+'/usr/bin/xz' -> '/bin/xz'
+'/usr/bin/unxz' -> '/bin/unxz'
+'/usr/bin/xzcat' -> '/bin/xzcat'
+}
+
+mv -v /usr/lib/liblzma.so.* /lib
+{
+'/usr/lib/liblzma.so.5' -> '/lib/liblzma.so.5'
+'/usr/lib/liblzma.so.5.0.5' -> '/lib/liblzma.so.5.0.5'
+}
+ln -svf ../../lib/$(readlink /usr/lib/liblzma.so) /usr/lib/liblzma.so
+{
+'/usr/lib/liblzma.so' -> '../../lib/liblzma.so.5.0.5'
+}

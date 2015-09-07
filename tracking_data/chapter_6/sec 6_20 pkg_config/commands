@@ -1,0 +1,25 @@
+./configure --prefix=/usr \
+--with-internal-glib \
+--disable-host-tool \
+--docdir=/usr/share/doc/pkg-config-0.28
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m12.367s
+user	0m38.020s
+sys	0m1.556s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m1.991s
+user	0m0.400s
+sys	0m0.152s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.308s
+user	0m0.176s
+sys	0m0.032s
+}

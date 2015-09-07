@@ -1,0 +1,69 @@
+patch -Np1 -i ../bzip2-1.0.6-install_docs-1.patch
+sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile
+
+make -f Makefile-libbz2_so
+{
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c blocksort.c
+In function 'mainSort':
+blocksort.c:347:6: warning: inlining failed in call to 'mainGtU.part.0': call is unlikely and code size would grow [-Winline]
+ Bool mainGtU ( UInt32  i1, 
+      ^
+cc1: warning: called from here [-Winline]
+blocksort.c:347:6: warning: inlining failed in call to 'mainGtU.part.0': call is unlikely and code size would grow [-Winline]
+ Bool mainGtU ( UInt32  i1, 
+      ^
+cc1: warning: called from here [-Winline]
+blocksort.c:347:6: warning: inlining failed in call to 'mainGtU.part.0': call is unlikely and code size would grow [-Winline]
+ Bool mainGtU ( UInt32  i1, 
+      ^
+cc1: warning: called from here [-Winline]
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c huffman.c
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c crctable.c
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c randtable.c
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c compress.c
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c decompress.c
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -c bzlib.c
+gcc -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.6 blocksort.o huffman.o crctable.o randtable.o compress.o decompress.o bzlib.o
+gcc -fpic -fPIC -Wall -Winline -O2 -g -D_FILE_OFFSET_BITS=64 -o bzip2-shared bzip2.c libbz2.so.1.0.6
+bzip2.c: In function 'testStream':
+bzip2.c:557:37: warning: variable 'nread' set but not used [-Wunused-but-set-variable]
+    Int32   bzerr, bzerr_dummy, ret, nread, streamNo, i;
+                                     ^
+rm -f libbz2.so.1.0
+ln -s libbz2.so.1.0.6 libbz2.so.1.0
+}
+
+make clean
+{
+rm -f *.o libbz2.a bzip2 bzip2recover \
+sample1.rb2 sample2.rb2 sample3.rb2 \
+sample1.tst sample2.tst sample3.tst
+}
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m2.627s
+user	0m6.704s
+sys	0m0.136s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m0.156s
+user	0m0.120s
+sys	0m0.000s
+}
+
+time make PREFIX=/usr install >make_install.log 2>make_install_err.log
+{
+real	0m0.085s
+user	0m0.008s
+sys	0m0.004s
+}
+
+cp -v bzip2-shared /bin/bzip2
+cp -av libbz2.so* /lib
+ln -sv ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
+rm -v /usr/bin/{bunzip2,bzcat,bzip2}
+ln -sv bzip2 /bin/bunzip2
+ln -sv bzip2 /bin/bzcat

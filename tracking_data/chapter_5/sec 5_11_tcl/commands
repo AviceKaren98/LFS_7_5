@@ -1,0 +1,31 @@
+cd unix
+./configure --prefix=/tools
+
+time make -j4 >make.log 2>make_err.log
+{
+real	1m24.963s
+user	2m29.280s
+sys	0m8.440s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m10.063s
+user	0m2.492s
+sys	0m1.248s
+}
+
+chmod -v u+w /tools/lib/libtcl8.6.so
+{
+mode of '/tools/lib/libtcl8.6.so' changed from 0555 (r-xr-xr-x) to 0755 (rwxr-xr-x)
+}
+
+make install-private-headers
+{
+Installing private header files to /tools/include/
+}
+
+ln -sv tclsh8.6 /tools/bin/tclsh
+{
+'/tools/bin/tclsh' -> 'tclsh8.6'
+}

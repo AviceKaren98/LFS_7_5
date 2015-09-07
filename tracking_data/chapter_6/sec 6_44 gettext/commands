@@ -1,0 +1,22 @@
+./configure --prefix=/usr --docdir=/usr/share/doc/gettext-0.18.3.2
+
+time make -j4 >make.log 2>make_err.log
+{
+real	1m26.354s
+user	3m44.280s
+sys	0m11.848s
+}
+
+time make -j4 check >make_check.log 2>make_check_err.log
+{
+real	0m48.680s
+user	1m10.676s
+sys	0m22.400s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m14.328s
+user	0m2.204s
+sys	0m1.240s
+}

@@ -1,0 +1,15 @@
+make mrproper
+
+time make headers_check >make.log 2>make_err.log
+{
+real	0m11.995s
+user	0m3.968s
+sys	0m1.080s
+}
+time make INSTALL_HDR_PATH=dest headers_install >make_headers.log 2>make_headers_err.log
+{
+real	0m8.802s
+user	0m2.200s
+sys	0m0.984s
+}
+cp -rv dest/include/* /tools/include

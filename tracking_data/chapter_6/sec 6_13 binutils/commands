@@ -1,0 +1,36 @@
+expect -c "spawn ls"
+{
+spawn ls
+}
+
+rm -fv etc/standards.info
+{
+removed 'etc/standards.info'
+}
+sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
+
+mkdir -v ../binutils-build
+cd ../binutils-build
+
+../binutils-2.24/configure --prefix=/usr --enable-shared
+
+time make -j4 tooldir=/usr >make.log 2>make_err.log
+{
+real	1m16.428s
+user	3m11.268s
+sys	0m9.132s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	3m2.663s
+user	1m27.836s
+sys	0m27.280s
+}
+
+time make tooldir=/usr install >make_install.log 2>make_install_err.log
+{
+real	0m4.574s
+user	0m1.568s
+sys	0m0.436s
+}

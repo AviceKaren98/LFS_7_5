@@ -1,0 +1,33 @@
+./configure --prefix=/usr \
+--exec-prefix= \
+--libdir=/usr/lib \
+--docdir=/usr/share/doc/procps-ng-3.3.9 \
+--disable-static \
+--disable-kill
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m6.794s
+user	0m14.044s
+sys	0m0.656s
+}
+
+sed -i -r 's|(pmap_initname)\\\$|\1|' testsuite/pmap.test/pmap.exp
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m5.157s
+user	0m0.848s
+sys	0m0.236s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.859s
+user	0m0.424s
+sys	0m0.076s
+}
+
+mv -v /usr/bin/pidof /bin
+mv -v /usr/lib/libprocps.so.* /lib
+ln -sfv ../../lib/$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so

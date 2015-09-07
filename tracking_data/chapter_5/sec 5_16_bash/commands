@@ -1,0 +1,29 @@
+patch -Np1 -i ../bash-4.2-fixes-12.patch
+
+./configure --prefix=/tools --without-bash-malloc
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m17.652s
+user	0m49.024s
+sys	0m2.284s
+}
+
+time make tests >make_tests.log 2>make_tests_err.log
+{
+real	2m30.561s
+user	0m2.592s
+sys	0m1.020s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.689s
+user	0m0.072s
+sys	0m0.060s
+}
+
+ln -sv bash /tools/bin/sh
+{
+'/tools/bin/sh' -> 'bash'
+}

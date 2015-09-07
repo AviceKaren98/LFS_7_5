@@ -1,0 +1,36 @@
+./configure --prefix=/usr --bindir=/bin --htmldir=/usr/share/doc/sed-4.2.2
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m1.726s
+user	0m4.140s
+sys	0m0.348s
+}
+
+time make html >make_html.log 2>make_html_err.log
+{
+real	0m1.562s
+user	0m1.428s
+sys	0m0.020s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m5.775s
+user	0m3.884s
+sys	0m0.268s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.531s
+user	0m0.152s
+sys	0m0.048s
+}
+
+time make -C doc install-html >make_install_html.log 2>make_install_html_err.log
+{
+real	0m0.021s
+user	0m0.004s
+sys	0m0.008s
+}

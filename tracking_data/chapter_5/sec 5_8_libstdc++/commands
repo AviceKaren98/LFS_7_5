@@ -1,0 +1,26 @@
+mkdir -pv ../gcc-build
+cd ../gcc-build
+
+../gcc-4.8.2/libstdc++-v3/configure \
+--host=$LFS_TGT \
+--prefix=/tools \
+--disable-multilib \
+--disable-shared \
+--disable-nls \
+--disable-libstdcxx-threads \
+--disable-libstdcxx-pch \
+--with-gxx-include-dir=/tools/$LFS_TGT/include/c++/4.8.2
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m13.235s
+user	0m33.784s
+sys	0m1.808s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m2.892s
+user	0m0.384s
+sys	0m0.324s
+}

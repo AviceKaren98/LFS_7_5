@@ -1,0 +1,37 @@
+sed -i -e '/test-bison/d' tests/Makefile.in
+
+./configure --prefix=/usr --docdir=/usr/share/doc/flex-2.5.38
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m3.632s
+user	0m8.728s
+sys	0m0.476s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m44.546s
+user	0m39.124s
+sys	0m1.952s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.973s
+user	0m0.396s
+sys	0m0.080s
+}
+
+
+cat > /usr/bin/lex << "EOF"
+#!/bin/sh
+# Begin /usr/bin/lex
+exec /usr/bin/flex -l "$@"
+# End /usr/bin/lex
+EOF
+
+chmod -v 755 /usr/bin/lex
+{
+mode of '/usr/bin/lex' changed from 0644 (rw-r--r--) to 0755 (rwxr-xr-x)
+}

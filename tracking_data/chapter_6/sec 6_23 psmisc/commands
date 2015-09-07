@@ -1,0 +1,25 @@
+./configure --prefix=/usr
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m1.122s
+user	0m2.408s
+sys	0m0.112s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.317s
+user	0m0.048s
+sys	0m0.036s
+}
+
+mv -v /usr/bin/fuser /bin
+{
+'/usr/bin/fuser' -> '/bin/fuser'
+}
+
+mv -v /usr/bin/killall /bin
+{
+'/usr/bin/killall' -> '/bin/killall'
+}

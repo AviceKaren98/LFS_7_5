@@ -1,0 +1,6 @@
+time make install >make.log 2>make_err.log
+{
+real	0m0.160s
+user	0m0.012s
+sys	0m0.088s
+}

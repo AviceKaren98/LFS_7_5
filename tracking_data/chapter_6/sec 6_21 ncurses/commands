@@ -1,0 +1,69 @@
+./configure --prefix=/usr \
+--mandir=/usr/share/man \
+--with-shared \
+--without-debug \
+--enable-pc-files \
+--enable-widec
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m30.528s
+user	1m33.644s
+sys	0m6.348s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m6.350s
+user	0m1.336s
+sys	0m0.504s
+}
+
+time make all >make_check.log 2>make_check_err.log
+{
+real	0m1.689s
+user	0m1.068s
+sys	0m0.196s
+}
+
+mv -v /usr/lib/libncursesw.so.5* /lib
+{
+'/usr/lib/libncursesw.so.5' -> '/lib/libncursesw.so.5'
+'/usr/lib/libncursesw.so.5.9' -> '/lib/libncursesw.so.5.9'
+}
+
+ln -sfv ../../lib/$(readlink /usr/lib/libncursesw.so) /usr/lib/libncursesw.so
+{
+'/usr/lib/libncursesw.so' -> '../../lib/libncursesw.so.5'
+}
+
+for lib in ncurses form panel menu ; do
+rm -vf /usr/lib/lib${lib}.so
+echo "INPUT(-l${lib}w)" > /usr/lib/lib${lib}.so
+ln -sfv lib${lib}w.a /usr/lib/lib${lib}.a
+ln -sfv ${lib}w.pc /usr/lib/pkgconfig/${lib}.pc
+done
+{
+'/usr/lib/libncurses.a' -> 'libncursesw.a'
+'/usr/lib/pkgconfig/ncurses.pc' -> 'ncursesw.pc'
+'/usr/lib/libform.a' -> 'libformw.a'
+'/usr/lib/pkgconfig/form.pc' -> 'formw.pc'
+'/usr/lib/libpanel.a' -> 'libpanelw.a'
+'/usr/lib/pkgconfig/panel.pc' -> 'panelw.pc'
+'/usr/lib/libmenu.a' -> 'libmenuw.a'
+'/usr/lib/pkgconfig/menu.pc' -> 'menuw.pc'
+}
+
+ln -sfv libncurses++w.a /usr/lib/libncurses++.a
+{
+'/usr/lib/libncurses++.a' -> 'libncurses++w.a'
+}
+
+rm -vf /usr/lib/libcursesw.so
+echo "INPUT(-lncursesw)" > /usr/lib/libcursesw.so
+ln -sfv libncurses.so /usr/lib/libcurses.so
+ln -sfv libncursesw.a /usr/lib/libcursesw.a
+ln -sfv libncurses.a  /usr/lib/libcurses.a
+
+mkdir -v /usr/share/doc/ncurses-5.9
+cp -v -R doc/* /usr/share/doc/ncurses-5.9

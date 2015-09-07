@@ -1,0 +1,20 @@
+patch -Np1 -i ../sysvinit-2.88dsf-consolidated-1.patch
+{
+patching file src/Makefile
+patching file src/init.c
+patching file src/shutdown.c
+}
+
+time make -j4 -C src >make.log 2>make_err.log
+{
+real	0m0.952s
+user	0m2.736s
+sys	0m0.140s
+}
+
+time make -C src install >make_install.log 2>make_install_err.log
+{
+real	0m0.123s
+user	0m0.004s
+sys	0m0.012s
+}

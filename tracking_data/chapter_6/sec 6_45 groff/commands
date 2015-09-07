@@ -1,0 +1,24 @@
+PAGE=A4 ./configure --prefix=/usr
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m34.753s
+user	1m27.960s
+sys	0m3.580s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m4.404s
+user	0m0.608s
+sys	0m0.396s
+}
+
+ln -sv eqn /usr/bin/geqn
+{
+'/usr/bin/geqn' -> 'eqn'
+}
+ln -sv tbl /usr/bin/gtbl
+{
+'/usr/bin/gtbl' -> 'tbl'
+}

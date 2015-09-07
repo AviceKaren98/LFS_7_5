@@ -1,0 +1,41 @@
+echo '#define PATH_PROCNET_DEV "/proc/net/dev"' >> ifconfig/system/linux.h
+
+./configure --prefix=/usr \
+--localstatedir=/var \
+--disable-logger \
+--disable-syslogd \
+--disable-whois \
+--disable-servers
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m8.749s
+user	0m21.240s
+sys	0m1.488s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m1.285s
+user	0m0.728s
+sys	0m0.128s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.170s
+user	0m0.700s
+sys	0m0.084s
+}
+
+mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
+{
+'/usr/bin/hostname' -> '/bin/hostname'
+'/usr/bin/ping' -> '/bin/ping'
+'/usr/bin/ping6' -> '/bin/ping6'
+'/usr/bin/traceroute' -> '/bin/traceroute'
+}
+mv -v /usr/bin/ifconfig /sbin
+{
+'/usr/bin/ifconfig' -> '/sbin/ifconfig'
+}

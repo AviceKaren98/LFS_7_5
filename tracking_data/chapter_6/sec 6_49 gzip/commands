@@ -1,0 +1,41 @@
+./configure --prefix=/usr --bindir=/bin
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m3.333s
+user	0m7.980s
+sys	0m0.624s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m4.364s
+user	0m1.668s
+sys	0m0.544s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.580s
+user	0m0.288s
+sys	0m0.048s
+}
+
+mv -v /bin/{gzexe,uncompress,zcmp,zdiff,zegrep} /usr/bin
+{
+'/bin/gzexe' -> '/usr/bin/gzexe'
+'/bin/uncompress' -> '/usr/bin/uncompress'
+'/bin/zcmp' -> '/usr/bin/zcmp'
+'/bin/zdiff' -> '/usr/bin/zdiff'
+'/bin/zegrep' -> '/usr/bin/zegrep'
+}
+
+mv -v /bin/{zfgrep,zforce,zgrep,zless,zmore,znew} /usr/bin
+{
+'/bin/zfgrep' -> '/usr/bin/zfgrep'
+'/bin/zforce' -> '/usr/bin/zforce'
+'/bin/zgrep' -> '/usr/bin/zgrep'
+'/bin/zless' -> '/usr/bin/zless'
+'/bin/zmore' -> '/usr/bin/zmore'
+'/bin/znew' -> '/usr/bin/znew'
+}

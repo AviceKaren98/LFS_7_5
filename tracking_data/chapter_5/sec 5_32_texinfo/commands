@@ -1,0 +1,22 @@
+./configure --prefix=/tools
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m10.069s
+user	0m13.564s
+sys	0m0.384s
+}
+
+time make check >make_test.log 2>make_test_err.log
+{
+real	0m46.618s
+user	0m23.860s
+sys	0m3.108s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.886s
+user	0m0.256s
+sys	0m0.092s
+}

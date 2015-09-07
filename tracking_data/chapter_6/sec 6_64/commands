@@ -1,0 +1,10 @@
+rm -rf /tmp/*
+
+//THE DEBUGGING SYMBOLS WERE NOT STRIPPED AND HENCE THE CHAPTER 6 SECTION 65 WAS SKIPPED
+
+//EDITED THE ~/chroot.sh TO THE BELOW FILE
+
+chroot "$LFS" /usr/bin/env -i \
+HOME=/root TERM="$TERM" PS1='\u:\w\$ ' \
+PATH=/bin:/usr/bin:/sbin:/usr/sbin \
+/bin/bash --login

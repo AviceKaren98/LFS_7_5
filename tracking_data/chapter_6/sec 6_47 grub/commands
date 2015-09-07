@@ -1,0 +1,22 @@
+sed -i -e '/gets is a/d' grub-core/gnulib/stdio.in.h
+
+./configure --prefix=/usr \
+--sbindir=/sbin \
+--sysconfdir=/etc \
+--disable-grub-emu-usb \
+--disable-efiemu \
+--disable-werror
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m37.882s
+user	1m37.880s
+sys	0m7.424s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.802s
+user	0m0.784s
+sys	0m0.172s
+}

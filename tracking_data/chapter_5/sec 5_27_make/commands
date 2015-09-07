@@ -1,0 +1,22 @@
+./configure --prefix=/tools --without-guile
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m3.168s
+user	0m10.212s
+sys	0m0.412s
+}
+
+time make check >make_test.log 2>make_test_err.log
+{
+real	0m51.742s
+user	0m7.004s
+sys	0m1.620s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.384s
+user	0m0.100s
+sys	0m0.028s
+}

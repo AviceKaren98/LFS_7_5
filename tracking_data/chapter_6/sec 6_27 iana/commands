@@ -1,0 +1,12 @@
+time make -j4 >make.log 2>make_err.log
+{
+real	0m0.224s
+user	0m0.224s
+sys	0m0.004s
+}
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.010s
+user	0m0.004s
+sys	0m0.000s
+}

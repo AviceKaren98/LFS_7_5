@@ -1,0 +1,20 @@
+time make -j4 >make.log 2>make_err.log
+{
+real	0m2.578s
+user	0m6.612s
+sys	0m0.152s
+}
+
+time make test >make_test.log 2>make_test_err.log
+{
+real	0m0.150s
+user	0m0.112s
+sys	0m0.004s
+}
+
+time make PREFIX=/tools install >make_install.log 2>make_install_err.log
+{
+real	0m0.057s
+user	0m0.000s
+sys	0m0.008s
+}

@@ -1,0 +1,149 @@
+sed -i 's/\\$$(pwd)/`pwd`/' timezone/Makefile
+
+patch -Np1 -i ../glibc-2.19-fhs-1.patch >patch.log 2>patch_err.log
+
+mkdir -v ../glibc-build
+{
+mkdir: created directory '../glibc-build'
+}
+cd ../glibc-build
+
+../glibc-2.19/configure \
+--prefix=/usr \
+--disable-profile \
+--enable-kernel=2.6.32 \
+--enable-obsolete-rpc
+
+time make -j4 >make.log 2>make_err.log
+{
+real	4m32.641s
+user	11m49.744s
+sys	1m19.344s
+}
+
+make -k check 2>&1 | tee glibc-check-log
+{
+real	37m0.951s
+user	18m19.352s
+sys	6m37.708s
+}
+grep Error glibc-check-log
+{
+make[2]: *** [/sources/glibc-build/libio/tst-ftell-partial-wide.out] Error 1
+make[1]: *** [libio/tests] Error 2
+make[2]: *** [/sources/glibc-build/posix/tst-getaddrinfo4.out] Error 1
+make[2]: [/sources/glibc-build/posix/annexc.out] Error 1 (ignored)
+make[1]: *** [posix/tests] Error 2
+make[2]: [/sources/glibc-build/conform/run-conformtest.out] Error 1 (ignored)
+make: *** [check] Error 2
+}
+
+touch /etc/ld.so.conf
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	1m43.565s
+user	1m25.920s
+sys	0m3.652s
+}
+
+cp -v ../glibc-2.19/nscd/nscd.conf /etc/nscd.conf
+{
+'../glibc-2.19/nscd/nscd.conf' -> '/etc/nscd.conf'
+}
+mkdir -pv /var/cache/nscd
+{
+mkdir: created directory '/var/cache/nscd'
+}
+
+
+mkdir -pv /usr/lib/locale
+{
+mkdir: created directory '/usr/lib/locale'
+}
+localedef -i cs_CZ -f UTF-8 cs_CZ.UTF-8
+localedef -i de_DE -f ISO-8859-1 de_DE
+localedef -i de_DE@euro -f ISO-8859-15 de_DE@euro
+localedef -i de_DE -f UTF-8 de_DE.UTF-8
+localedef -i en_GB -f UTF-8 en_GB.UTF-8
+localedef -i en_HK -f ISO-8859-1 en_HK
+localedef -i en_PH -f ISO-8859-1 en_PH
+localedef -i en_US -f ISO-8859-1 en_US
+localedef -i en_US -f UTF-8 en_US.UTF-8
+localedef -i es_MX -f ISO-8859-1 es_MX
+localedef -i fa_IR -f UTF-8 fa_IR
+localedef -i fr_FR -f ISO-8859-1 fr_FR
+localedef -i fr_FR@euro -f ISO-8859-15 fr_FR@euro
+localedef -i fr_FR -f UTF-8 fr_FR.UTF-8
+localedef -i it_IT -f ISO-8859-1 it_IT
+localedef -i it_IT -f UTF-8 it_IT.UTF-8
+localedef -i ja_JP -f EUC-JP ja_JP
+localedef -i ru_RU -f KOI8-R ru_RU.KOI8-R
+localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
+localedef -i tr_TR -f UTF-8 tr_TR.UTF-8
+localedef -i zh_CN -f GB18030 zh_CN.GB18030
+
+time make localedata/install-locales >make_localedata.log 2>make_localedata_err.log
+{
+real	4m36.541s
+user	4m15.568s
+sys	0m12.676s
+}
+
+cat > /etc/nsswitch.conf << "EOF"
+# Begin /etc/nsswitch.conf
+passwd: files
+group: files
+shadow: files
+hosts: files dns
+networks: files
+protocols: files
+services: files
+ethers: files
+rpc: files
+# End /etc/nsswitch.conf
+EOF
+
+
+tar -xf ../tzdata2013i.tar.gz
+
+ZONEINFO=/usr/share/zoneinfo
+mkdir -pv $ZONEINFO/{posix,right}
+{
+mkdir: created directory '/usr/share/zoneinfo/posix'
+mkdir: created directory '/usr/share/zoneinfo/right'
+}
+for tz in etcetera southamerica northamerica europe africa antarctica \
+asia australasia backward pacificnew systemv; do
+zic -L /dev/null -d $ZONEINFO -y "sh yearistype.sh" ${tz}
+zic -L /dev/null -d $ZONEINFO/posix -y "sh yearistype.sh" ${tz}
+zic -L leapseconds -d $ZONEINFO/right -y "sh yearistype.sh" ${tz}
+done
+
+cp -v zone.tab iso3166.tab $ZONEINFO
+{
+'zone.tab' -> '/usr/share/zoneinfo/zone.tab'
+'iso3166.tab' -> '/usr/share/zoneinfo/iso3166.tab'
+}
+zic -d $ZONEINFO -p America/New_York
+unset ZONEINFO
+
+
+tzselect
+
+cp -v /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+{
+'/usr/share/zoneinfo/Asia/Kolkata' -> '/etc/localtime'
+}
+
+cat > /etc/ld.so.conf << "EOF"
+# Begin /etc/ld.so.conf
+/usr/local/lib
+/opt/lib
+EOF
+
+cat >> /etc/ld.so.conf << "EOF"
+# Add an include directory
+include /etc/ld.so.conf.d/*.conf
+EOF
+mkdir -pv /etc/ld.so.conf.d

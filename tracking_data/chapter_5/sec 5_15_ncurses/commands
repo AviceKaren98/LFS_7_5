@@ -1,0 +1,20 @@
+./configure --prefix=/tools \
+--with-shared \
+--without-debug \
+--without-ada \
+--enable-widec \
+--enable-overwrite
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m29.797s
+user	1m32.480s
+sys	0m6.468s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m17.172s
+user	0m5.892s
+sys	0m1.088s
+}

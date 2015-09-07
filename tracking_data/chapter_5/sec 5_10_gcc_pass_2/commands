@@ -1,0 +1,102 @@
+cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
+`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/include-fixed/limits.h
+
+for file in \
+$(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
+do
+cp -uv $file{,.orig}
+sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
+-e 's@/usr@/tools@g' $file.orig > $file
+echo '
+#undef STANDARD_STARTFILE_PREFIX_1
+#undef STANDARD_STARTFILE_PREFIX_2
+#define STANDARD_STARTFILE_PREFIX_1 "/tools/lib/"
+#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+touch $file.orig
+done
+{
+'gcc/config/mips/linux64.h' -> 'gcc/config/mips/linux64.h.orig'
+'gcc/config/mips/linux.h' -> 'gcc/config/mips/linux.h.orig'
+'gcc/config/vax/linux.h' -> 'gcc/config/vax/linux.h.orig'
+'gcc/config/sparc/linux64.h' -> 'gcc/config/sparc/linux64.h.orig'
+'gcc/config/sparc/sysv4.h' -> 'gcc/config/sparc/sysv4.h.orig'
+'gcc/config/sparc/linux.h' -> 'gcc/config/sparc/linux.h.orig'
+'gcc/config/m68k/linux.h' -> 'gcc/config/m68k/linux.h.orig'
+'gcc/config/frv/linux.h' -> 'gcc/config/frv/linux.h.orig'
+'gcc/config/bfin/linux.h' -> 'gcc/config/bfin/linux.h.orig'
+'gcc/config/m32r/linux.h' -> 'gcc/config/m32r/linux.h.orig'
+'gcc/config/mn10300/linux.h' -> 'gcc/config/mn10300/linux.h.orig'
+'gcc/config/alpha/linux.h' -> 'gcc/config/alpha/linux.h.orig'
+'gcc/config/xtensa/linux.h' -> 'gcc/config/xtensa/linux.h.orig'
+'gcc/config/ia64/sysv4.h' -> 'gcc/config/ia64/sysv4.h.orig'
+'gcc/config/ia64/linux.h' -> 'gcc/config/ia64/linux.h.orig'
+'gcc/config/microblaze/linux.h' -> 'gcc/config/microblaze/linux.h.orig'
+'gcc/config/tilegx/linux.h' -> 'gcc/config/tilegx/linux.h.orig'
+'gcc/config/i386/linux64.h' -> 'gcc/config/i386/linux64.h.orig'
+'gcc/config/i386/sysv4.h' -> 'gcc/config/i386/sysv4.h.orig'
+'gcc/config/i386/linux.h' -> 'gcc/config/i386/linux.h.orig'
+'gcc/config/rs6000/linux64.h' -> 'gcc/config/rs6000/linux64.h.orig'
+'gcc/config/rs6000/sysv4.h' -> 'gcc/config/rs6000/sysv4.h.orig'
+'gcc/config/rs6000/linux.h' -> 'gcc/config/rs6000/linux.h.orig'
+'gcc/config/tilepro/linux.h' -> 'gcc/config/tilepro/linux.h.orig'
+'gcc/config/s390/linux.h' -> 'gcc/config/s390/linux.h.orig'
+'gcc/config/sh/linux.h' -> 'gcc/config/sh/linux.h.orig'
+'gcc/config/linux.h' -> 'gcc/config/linux.h.orig'
+'gcc/config/cris/linux.h' -> 'gcc/config/cris/linux.h.orig'
+}
+
+tar -Jxf ../mpfr-3.1.2.tar.xz
+mv -v mpfr-3.1.2 mpfr
+tar -Jxf ../gmp-5.1.3.tar.xz
+mv -v gmp-5.1.3 gmp
+tar -zxf ../mpc-1.0.2.tar.gz
+mv -v mpc-1.0.2 mpc
+
+mkdir -v ../gcc-build
+cd ../gcc-build
+
+CC=$LFS_TGT-gcc \
+CXX=$LFS_TGT-g++ \
+AR=$LFS_TGT-ar \
+RANLIB=$LFS_TGT-ranlib \
+../gcc-4.8.2/configure \
+--prefix=/tools \
+--with-local-prefix=/tools \
+--with-native-system-header-dir=/tools/include \
+--enable-clocale=gnu \
+--enable-shared \
+--enable-threads=posix \
+--enable-__cxa_atexit \
+--enable-languages=c,c++ \
+--disable-libstdcxx-pch \
+--disable-multilib \
+--disable-bootstrap \
+--disable-libgomp \
+--with-mpfr-include=$(pwd)/../gcc-4.8.2/mpfr/src \
+--with-mpfr-lib=$(pwd)/mpfr/src/.libs
+
+time make -j4 >make.log 2>make_err.log
+{
+real	7m58.335s
+user	24m25.644s
+sys	1m8.116s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m15.855s
+user	0m2.824s
+sys	0m1.416s
+}
+
+ln -sv gcc /tools/bin/cc
+{
+'/tools/bin/cc' -> 'gcc'
+}
+
+echo 'main(){}' > dummy.c
+cc dummy.c
+readelf -l a.out | grep ': /tools'
+{
+[Requesting program interpreter: /tools/lib/ld-linux.so.2]
+}

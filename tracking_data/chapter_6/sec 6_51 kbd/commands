@@ -1,0 +1,130 @@
+patch -Np1 -i ../kbd-2.0.1-backspace-1.patch
+{
+patching file data/keymaps/i386/dvorak/dvorak-l.map
+patching file data/keymaps/i386/dvorak/dvorak-r.map
+patching file data/keymaps/i386/fgGIod/tr_f-latin5.map
+patching file data/keymaps/i386/qwerty/lt.l4.map
+patching file data/keymaps/i386/qwerty/lt.map
+patching file data/keymaps/i386/qwerty/no-latin1.map
+patching file data/keymaps/i386/qwerty/ru1.map
+patching file data/keymaps/i386/qwerty/ru2.map
+patching file data/keymaps/i386/qwerty/ru-cp1251.map
+patching file data/keymaps/i386/qwerty/ru-ms.map
+patching file data/keymaps/i386/qwerty/ru_win.map
+patching file data/keymaps/i386/qwerty/se-ir209.map
+patching file data/keymaps/i386/qwerty/se-lat6.map
+patching file data/keymaps/i386/qwerty/tr_q-latin5.map
+patching file data/keymaps/i386/qwerty/ua.map
+patching file data/keymaps/i386/qwerty/ua-utf.map
+patching file data/keymaps/i386/qwerty/ua-utf-ws.map
+patching file data/keymaps/i386/qwerty/ua-ws.map
+}
+
+sed -i 's/\(RESIZECONS_PROGS=\)yes/\1no/g' configure
+sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
+
+PKG_CONFIG_PATH=/tools/lib/pkgconfig ./configure --prefix=/usr --disable-vlock
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m6.067s
+user	0m14.492s
+sys	0m1.088s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m0.523s
+user	0m0.332s
+sys	0m0.020s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.210s
+user	0m0.572s
+sys	0m0.112s
+}
+
+mkdir -v /usr/share/doc/kbd-2.0.1
+cp -R -v docs/doc/* /usr/share/doc/kbd-2.0.1
+{
+'docs/doc/A20' -> '/usr/share/doc/kbd-2.0.1/A20'
+'docs/doc/A20/A20.html' -> '/usr/share/doc/kbd-2.0.1/A20/A20.html'
+'docs/doc/A20/xfix-286mode2' -> '/usr/share/doc/kbd-2.0.1/A20/xfix-286mode2'
+'docs/doc/README.Crosser' -> '/usr/share/doc/kbd-2.0.1/README.Crosser'
+'docs/doc/TODO' -> '/usr/share/doc/kbd-2.0.1/TODO'
+'docs/doc/as400.kbd' -> '/usr/share/doc/kbd-2.0.1/as400.kbd'
+'docs/doc/cirrus.videomodes' -> '/usr/share/doc/kbd-2.0.1/cirrus.videomodes'
+'docs/doc/console.docs' -> '/usr/share/doc/kbd-2.0.1/console.docs'
+'docs/doc/cp1252.txt' -> '/usr/share/doc/kbd-2.0.1/cp1252.txt'
+'docs/doc/dvorak' -> '/usr/share/doc/kbd-2.0.1/dvorak'
+'docs/doc/dvorak/dvorak-l.xmodmap' -> '/usr/share/doc/kbd-2.0.1/dvorak/dvorak-l.xmodmap'
+'docs/doc/dvorak/ANSI-dvorak.gif' -> '/usr/share/doc/kbd-2.0.1/dvorak/ANSI-dvorak.gif'
+'docs/doc/dvorak/dvorak.txt' -> '/usr/share/doc/kbd-2.0.1/dvorak/dvorak.txt'
+'docs/doc/dvorak/dvorak-r.xmodmap' -> '/usr/share/doc/kbd-2.0.1/dvorak/dvorak-r.xmodmap'
+'docs/doc/dvorak/dvorak.xmodmap' -> '/usr/share/doc/kbd-2.0.1/dvorak/dvorak.xmodmap'
+'docs/doc/dvorak/dvorak.diffs' -> '/usr/share/doc/kbd-2.0.1/dvorak/dvorak.diffs'
+'docs/doc/font-formats' -> '/usr/share/doc/kbd-2.0.1/font-formats'
+'docs/doc/font-formats/font-formats-2.html' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats-2.html'
+'docs/doc/font-formats/font-formats-3.html' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats-3.html'
+'docs/doc/font-formats/font-formats.sgml' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats.sgml'
+'docs/doc/font-formats/font-formats-5.html' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats-5.html'
+'docs/doc/font-formats/font-formats-1.html' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats-1.html'
+'docs/doc/font-formats/font-formats.html' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats.html'
+'docs/doc/font-formats/font-formats-4.html' -> '/usr/share/doc/kbd-2.0.1/font-formats/font-formats-4.html'
+'docs/doc/iso8859-1.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-1.txt'
+'docs/doc/iso8859-10.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-10.txt'
+'docs/doc/iso8859-11.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-11.txt'
+'docs/doc/iso8859-13.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-13.txt'
+'docs/doc/iso8859-14.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-14.txt'
+'docs/doc/iso8859-15.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-15.txt'
+'docs/doc/iso8859-2.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-2.txt'
+'docs/doc/iso8859-3.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-3.txt'
+'docs/doc/iso8859-4.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-4.txt'
+'docs/doc/iso8859-5.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-5.txt'
+'docs/doc/iso8859-6.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-6.txt'
+'docs/doc/iso8859-7.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-7.txt'
+'docs/doc/iso8859-8.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-8.txt'
+'docs/doc/iso8859-9.txt' -> '/usr/share/doc/kbd-2.0.1/iso8859-9.txt'
+'docs/doc/iso8859.info' -> '/usr/share/doc/kbd-2.0.1/iso8859.info'
+'docs/doc/kbd.FAQ-1.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-1.html'
+'docs/doc/kbd.FAQ-10.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-10.html'
+'docs/doc/kbd.FAQ-11.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-11.html'
+'docs/doc/kbd.FAQ-12.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-12.html'
+'docs/doc/kbd.FAQ-13.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-13.html'
+'docs/doc/kbd.FAQ-14.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-14.html'
+'docs/doc/kbd.FAQ-15.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-15.html'
+'docs/doc/kbd.FAQ-16.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-16.html'
+'docs/doc/kbd.FAQ-17.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-17.html'
+'docs/doc/kbd.FAQ-18.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-18.html'
+'docs/doc/kbd.FAQ-19.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-19.html'
+'docs/doc/kbd.FAQ-2.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-2.html'
+'docs/doc/kbd.FAQ-20.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-20.html'
+'docs/doc/kbd.FAQ-21.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-21.html'
+'docs/doc/kbd.FAQ-22.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-22.html'
+'docs/doc/kbd.FAQ-23.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-23.html'
+'docs/doc/kbd.FAQ-3.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-3.html'
+'docs/doc/kbd.FAQ-4.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-4.html'
+'docs/doc/kbd.FAQ-5.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-5.html'
+'docs/doc/kbd.FAQ-6.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-6.html'
+'docs/doc/kbd.FAQ-7.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-7.html'
+'docs/doc/kbd.FAQ-8.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-8.html'
+'docs/doc/kbd.FAQ-9.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ-9.html'
+'docs/doc/kbd.FAQ.html' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ.html'
+'docs/doc/kbd.FAQ.sgml' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ.sgml'
+'docs/doc/kbd.FAQ.txt' -> '/usr/share/doc/kbd-2.0.1/kbd.FAQ.txt'
+'docs/doc/keysyms.h.info' -> '/usr/share/doc/kbd-2.0.1/keysyms.h.info'
+'docs/doc/n474.doc' -> '/usr/share/doc/kbd-2.0.1/n474.doc'
+'docs/doc/repeat' -> '/usr/share/doc/kbd-2.0.1/repeat'
+'docs/doc/repeat/set_kbd_repeat-2' -> '/usr/share/doc/kbd-2.0.1/repeat/set_kbd_repeat-2'
+'docs/doc/repeat/set_kbd_repeat-1' -> '/usr/share/doc/kbd-2.0.1/repeat/set_kbd_repeat-1'
+'docs/doc/scancodes' -> '/usr/share/doc/kbd-2.0.1/scancodes'
+'docs/doc/scancodes/README' -> '/usr/share/doc/kbd-2.0.1/scancodes/README'
+'docs/doc/utf' -> '/usr/share/doc/kbd-2.0.1/utf'
+'docs/doc/utf/\342\231\252\342\231\254' -> '/usr/share/doc/kbd-2.0.1/utf/\342\231\252\342\231\254'
+'docs/doc/utf/utfdemo' -> '/usr/share/doc/kbd-2.0.1/utf/utfdemo'
+'docs/doc/utf/utflist' -> '/usr/share/doc/kbd-2.0.1/utf/utflist'
+'docs/doc/utf/README' -> '/usr/share/doc/kbd-2.0.1/utf/README'
+'docs/doc/utf/ethiopic' -> '/usr/share/doc/kbd-2.0.1/utf/ethiopic'
+}

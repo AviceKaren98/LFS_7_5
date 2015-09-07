@@ -1,0 +1,30 @@
+./configure --prefix=/usr --localstatedir=/var/lib/locate
+
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m5.301s
+user	0m13.260s
+sys	0m0.836s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m29.459s
+user	0m7.092s
+sys	0m2.324s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.233s
+user	0m0.428s
+sys	0m0.092s
+}
+
+mv -v /usr/bin/find /bin
+{
+'/usr/bin/find' -> '/bin/find'
+}
+
+sed -i 's/find:=${BINDIR}/find:=\/bin/' /usr/bin/updatedb

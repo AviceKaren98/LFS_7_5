@@ -1,0 +1,50 @@
+./configure --prefix=/usr --enable-cxx
+{
+//Summary
+Version:           GNU MP 5.1.3
+  Host type:         coreisbr-pc-linux-gnu
+  ABI:               32
+  Install prefix:    /usr
+  Compiler:          gcc -std=gnu99
+  Static libraries:  yes
+  Shared libraries:  yes
+}
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m37.941s
+user	1m35.144s
+sys	0m6.308s
+}
+
+time make check 2>&1 | tee gmp-check-log
+{
+real	3m13.280s
+user	2m48.148s
+sys	0m6.148s
+}
+
+awk '/tests passed/{total+=$2} ; END{print total}' gmp-check-log
+{
+185
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.601s
+user	0m0.304s
+sys	0m0.036s
+}
+
+mkdir -v /usr/share/doc/gmp-5.1.3
+{
+mkdir: created directory '/usr/share/doc/gmp-5.1.3'
+}
+cp -v doc/{isa_abi_headache,configuration} doc/*.html \
+/usr/share/doc/gmp-5.1.3
+{
+'doc/isa_abi_headache' -> '/usr/share/doc/gmp-5.1.3/isa_abi_headache'
+'doc/configuration' -> '/usr/share/doc/gmp-5.1.3/configuration'
+'doc/projects.html' -> '/usr/share/doc/gmp-5.1.3/projects.html'
+'doc/tasks.html' -> '/usr/share/doc/gmp-5.1.3/tasks.html'
+}

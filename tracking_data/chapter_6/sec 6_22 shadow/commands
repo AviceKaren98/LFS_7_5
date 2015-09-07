@@ -1,0 +1,36 @@
+sed -i 's/groups$(EXEEXT) //' src/Makefile.in
+
+find man -name Makefile.in -exec sed -i 's/groups\.1 / /' {} \;
+
+sed -i -e 's@#ENCRYPT_METHOD DES@ENCRYPT_METHOD SHA512@' \
+-e 's@/var/spool/mail@/var/mail@' etc/login.defs
+
+./configure --sysconfdir=/etc
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m7.356s
+user	0m22.508s
+sys	0m1.692s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.739s
+user	0m0.344s
+sys	0m0.180s
+}
+
+mv -v /usr/bin/passwd /bin
+{
+'/usr/bin/passwd' -> '/bin/passwd'
+}
+
+pwconv
+
+grpconv
+
+passwd root
+{new root password - a}
+
+

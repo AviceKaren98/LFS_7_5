@@ -1,0 +1,61 @@
+sed -i '/MV.*old/d' Makefile.in
+sed -i '/{OLDSUFF}/c:' support/shlib-install
+
+patch -Np1 -i ../readline-6.2-fixes-2.patch
+{
+patching file callback.c
+patching file vi_mode.c
+}
+
+./configure --prefix=/usr
+
+time make SHLIB_LIBS=-lncurses -j4 >make.log 2>make_err.log
+{
+real	0m4.198s
+user	0m13.840s
+sys	0m0.888s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.253s
+user	0m0.064s
+sys	0m0.004s
+}
+
+mv -v /usr/lib/lib{readline,history}.so.* /lib
+{
+'/usr/lib/libreadline.so.6' -> '/lib/libreadline.so.6'
+'/usr/lib/libreadline.so.6.2' -> '/lib/libreadline.so.6.2'
+'/usr/lib/libhistory.so.6' -> '/lib/libhistory.so.6'
+'/usr/lib/libhistory.so.6.2' -> '/lib/libhistory.so.6.2'
+}
+
+ln -sfv ../../lib/$(readlink /usr/lib/libreadline.so) /usr/lib/libreadline.so
+{
+'/usr/lib/libreadline.so' -> '../../lib/libreadline.so.6'
+}
+ln -sfv ../../lib/$(readlink /usr/lib/libhistory.so ) /usr/lib/libhistory.so
+{
+'/usr/lib/libhistory.so' -> '../../lib/libhistory.so.6'
+}
+
+mkdir -v /usr/share/doc/readline-6.2
+install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-6.2
+{
+'doc/history.ps' -> '/usr/share/doc/readline-6.2/history.ps'
+'doc/history_3.ps' -> '/usr/share/doc/readline-6.2/history_3.ps'
+'doc/readline.ps' -> '/usr/share/doc/readline-6.2/readline.ps'
+'doc/readline_3.ps' -> '/usr/share/doc/readline-6.2/readline_3.ps'
+'doc/rluserman.ps' -> '/usr/share/doc/readline-6.2/rluserman.ps'
+'doc/history.pdf' -> '/usr/share/doc/readline-6.2/history.pdf'
+'doc/readline.pdf' -> '/usr/share/doc/readline-6.2/readline.pdf'
+'doc/rluserman.pdf' -> '/usr/share/doc/readline-6.2/rluserman.pdf'
+'doc/history.html' -> '/usr/share/doc/readline-6.2/history.html'
+'doc/readline.html' -> '/usr/share/doc/readline-6.2/readline.html'
+'doc/rluserman.html' -> '/usr/share/doc/readline-6.2/rluserman.html'
+'doc/history.dvi' -> '/usr/share/doc/readline-6.2/history.dvi'
+'doc/readline.dvi' -> '/usr/share/doc/readline-6.2/readline.dvi'
+'doc/rluserman.dvi' -> '/usr/share/doc/readline-6.2/rluserman.dvi'
+}
+

@@ -1,0 +1,24 @@
+sed -i 's:= @mkdir_p@:= /bin/mkdir -p:' po/Makefile.in.in
+
+./configure --prefix=/usr
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m7.615s
+user	0m15.448s
+sys	0m0.856s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	0m27.974s
+user	0m14.444s
+sys	0m2.076s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m27.974s
+user	0m14.444s
+sys	0m2.076s
+}

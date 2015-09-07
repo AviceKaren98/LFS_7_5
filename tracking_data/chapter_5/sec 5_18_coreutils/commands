@@ -1,0 +1,22 @@
+./configure --prefix=/tools --enable-install-program=hostname
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m29.319s
+user	1m29.272s
+sys	0m4.592s
+}
+
+time make RUN_EXPENSIVE_TESTS=yes check >make_tests.log 2>make_tests_err.log
+{
+real	4m33.835s
+user	1m14.768s
+sys	0m37.216s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m3.546s
+user	0m1.768s
+sys	0m0.212s
+}

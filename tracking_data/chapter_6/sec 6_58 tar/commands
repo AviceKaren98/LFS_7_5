@@ -1,0 +1,39 @@
+patch -Np1 -i ../tar-1.27.1-manpage-1.patch
+{
+patching file tarman
+}
+
+FORCE_UNSAFE_CONFIGURE=1 \
+./configure --prefix=/usr \
+--bindir=/bin
+
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m8.740s
+user	0m24.380s
+sys	0m1.516s
+}
+
+time make -j4 check >make_check.log 2>make_check_err.log
+{
+real	3m56.271s
+user	0m41.128s
+sys	0m21.380s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.150s
+user	0m0.416s
+sys	0m0.056s
+}
+
+time make -C doc install-html docdir=/usr/share/doc/tar-1.27.1 >make_doc.log 2>make_doc_err.log
+{
+real	0m11.713s
+user	0m10.556s
+sys	0m0.088s
+}
+
+perl tarman > /usr/share/man/man1/tar.1

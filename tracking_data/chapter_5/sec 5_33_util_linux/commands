@@ -1,0 +1,25 @@
+./configure --prefix=/tools \
+--disable-makeinstall-chown \
+--without-systemdsystemunitdir \
+PKG_CONFIG=""
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m40.044s
+user	1m57.664s
+sys	0m6.312s
+}
+
+time make check >make_test.log 2>make_test_err.log
+{
+real	2m39.749s
+user	0m26.356s
+sys	0m17.580s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m3.398s
+user	0m1.592s
+sys	0m0.288s
+}

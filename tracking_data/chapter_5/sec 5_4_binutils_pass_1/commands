@@ -1,0 +1,26 @@
+mkdir -v ../binutils-build
+cd ../binutils-build
+
+../binutils-2.24/configure \
+--prefix=/tools	\
+--with-sysroot=$lfs \
+--with-lib-path=/tools/lib \
+--target=$LFS_TGT \
+--disable-nls \
+--disable-werror
+
+time make -j4 >make.log 2>make_err.log
+Output:
+{
+real	1m0.238s
+user	2m25.992s
+sys	0m9.884s
+}
+
+time make install >make_install.log 2>make_install_err.log
+Output:
+{
+real	0m3.556s
+user	0m1.556s
+sys	0m0.212s
+}

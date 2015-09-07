@@ -1,0 +1,27 @@
+./configure --prefix=/usr \
+--enable-thread-safe \
+--docdir=/usr/share/doc/mpfr-3.1.2
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m18.897s
+user	0m54.664s
+sys	0m3.152s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	1m15.117s
+user	0m59.116s
+sys	0m3.504s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.416s
+user	0m0.292s
+sys	0m0.028s
+}
+
+make html
+make install-html

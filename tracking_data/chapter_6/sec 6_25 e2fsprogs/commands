@@ -1,0 +1,64 @@
+sed -i -e 's|^LD_LIBRARY_PATH.*|&:/tools/lib|' tests/test_config
+
+mkdir -v build
+{
+mkdir: created directory 'build'
+}
+cd build
+
+LIBS=-L/tools/lib \
+CFLAGS=-I/tools/include \
+PKG_CONFIG_PATH=/tools/lib/pkgconfig \
+../configure --prefix=/usr \
+--with-root-prefix="" \
+--enable-elf-shlibs \
+--disable-libblkid \
+--disable-libuuid \
+--disable-uuidd \
+--disable-fsck
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m12.191s
+user	0m24.708s
+sys	0m2.560s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	9m15.634s
+user	4m30.652s
+sys	0m5.072s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.157s
+user	0m0.320s
+sys	0m0.084s
+}
+
+make install-libs >make_install-libs.log 2>make_install-libs_err.log	
+
+chmod -v u+w /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+{
+mode of '/usr/lib/libcom_err.a' changed from 0444 (r--r--r--) to 0644 (rw-r--r--)
+mode of '/usr/lib/libe2p.a' changed from 0444 (r--r--r--) to 0644 (rw-r--r--)
+mode of '/usr/lib/libext2fs.a' changed from 0444 (r--r--r--) to 0644 (rw-r--r--)
+mode of '/usr/lib/libss.a' changed from 0444 (r--r--r--) to 0644 (rw-r--r--)
+}
+
+gunzip -v /usr/share/info/libext2fs.info.gz
+{
+/usr/share/info/libext2fs.info.gz:	 79.7% -- replaced with /usr/share/info/libext2fs.info
+}
+
+install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
+
+makeinfo -o doc/com_err.info ../lib/et/com_err.texinfo
+install -v -m644 doc/com_err.info /usr/share/info
+{
+'doc/com_err.info' -> '/usr/share/info/com_err.info'
+}
+install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
+

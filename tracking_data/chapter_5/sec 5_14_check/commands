@@ -1,0 +1,22 @@
+PKG_CONFIG= ./configure --prefix=/tools
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m3.812s
+user	0m10.040s
+sys	0m0.756s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.502s
+user	0m0.160s
+sys	0m0.016s
+}
+
+time make check >make_check.log 2>make_check_err.log
+{
+real	6m25.393s
+user	0m0.396s
+sys	0m0.420s
+}

@@ -1,0 +1,38 @@
+echo 7.5 > /etc/lfs-release
+
+
+cat > /etc/lsb-release << "EOF"
+DISTRIB_ID="Linux From Scratch"
+DISTRIB_RELEASE="7.5"
+DISTRIB_CODENAME="Aroonav_Goutam"
+DISTRIB_DESCRIPTION="Linux From Scratch"
+EOF
+
+
+logout
+
+sudo umount -v $lfs/dev/pts
+{
+devpts has been unmounted
+}
+sudo umount -v $lfs/dev
+{
+/dev has been unmounted
+}
+sudo umount -v $lfs/run
+{
+tmpfs has been unmounted
+}
+sudo umount -v $lfs/proc
+{
+proc has been unmounted
+}
+sudo umount -v $lfs/sys
+{
+sysfs has been unmounted
+}
+
+sudo umount -v $lfs
+{
+/dev/sda13 has been unmounted
+}

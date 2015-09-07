@@ -1,0 +1,23 @@
+./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.14.1
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m0.607s
+user	0m0.800s
+sys	0m0.044s
+}
+
+sed -i "s:./configure:LEXLIB=/usr/lib/libfl.a &:" t/lex-{clean,depend}-cxx.sh
+time make -j4 check >make_check.log 2>make_check_err.log
+{
+real	23m0.826s
+user	36m33.424s
+sys	3m44.716s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.471s
+user	0m0.192s
+sys	0m0.092s
+}

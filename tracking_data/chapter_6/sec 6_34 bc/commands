@@ -1,0 +1,22 @@
+./configure --prefix=/usr \
+--with-readline \
+--mandir=/usr/share/man \
+--infodir=/usr/share/info
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m2.720s
+user	0m5.624s
+sys	0m0.248s
+}
+
+echo "quit" | ./bc/bc -l Test/checklib.b >make_test.log
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.176s
+user	0m0.040s
+sys	0m0.024s
+}
+
+

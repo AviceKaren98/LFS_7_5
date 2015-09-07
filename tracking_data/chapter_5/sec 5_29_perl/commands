@@ -1,0 +1,14 @@
+patch -Np1 -i ../perl-5.18.2-libc-1.patch
+
+sh Configure -des -Dprefix=/tools
+
+time make -j4 >make.log 2>make_err.log
+{
+real	1m31.287s
+user	4m51.660s
+sys	0m9.976s
+}
+
+cp -v perl cpan/podlators/pod2man /tools/bin
+mkdir -pv /tools/lib/perl5/5.18.2
+cp -Rv lib/* /tools/lib/perl5/5.18.2

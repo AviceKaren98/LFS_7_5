@@ -1,0 +1,66 @@
+echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+
+./configure --prefix=/usr --enable-multibyte
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m27.974s
+user	1m43.028s
+sys	0m1.712s
+}
+
+time make test >make_test.log 2>make_test_err.log
+{
+real	1m59.164s
+user	0m15.696s
+sys	0m3.480s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m1.846s
+user	0m0.572s
+sys	0m0.276s
+}
+
+ln -sv vim /usr/bin/vi
+{
+'/usr/bin/vi' -> 'vim'
+}
+for L in /usr/share/man/{,*/}man1/vim.1; do
+ln -sv vim.1 $(dirname $L)/vi.1
+done
+{
+'/usr/share/man/man1/vi.1' -> 'vim.1'
+'/usr/share/man/fr.ISO8859-1/man1/vi.1' -> 'vim.1'
+'/usr/share/man/fr.UTF-8/man1/vi.1' -> 'vim.1'
+'/usr/share/man/fr/man1/vi.1' -> 'vim.1'
+'/usr/share/man/it.ISO8859-1/man1/vi.1' -> 'vim.1'
+'/usr/share/man/it.UTF-8/man1/vi.1' -> 'vim.1'
+'/usr/share/man/it/man1/vi.1' -> 'vim.1'
+'/usr/share/man/ja/man1/vi.1' -> 'vim.1'
+'/usr/share/man/pl.ISO8859-2/man1/vi.1' -> 'vim.1'
+'/usr/share/man/pl.UTF-8/man1/vi.1' -> 'vim.1'
+'/usr/share/man/pl/man1/vi.1' -> 'vim.1'
+'/usr/share/man/ru.KOI8-R/man1/vi.1' -> 'vim.1'
+'/usr/share/man/ru.UTF-8/man1/vi.1' -> 'vim.1'
+}
+
+ln -sv ../vim/vim74/doc /usr/share/doc/vim-7.4
+{
+'/usr/share/doc/vim-7.4' -> '../vim/vim74/doc'
+}
+
+
+cat > /etc/vimrc << "EOF"
+" Begin /etc/vimrc
+set nocompatible
+set backspace=2
+syntax on
+if (&term == "iterm") || (&term == "putty")
+set background=dark
+endif
+" End /etc/vimrc
+EOF
+
+

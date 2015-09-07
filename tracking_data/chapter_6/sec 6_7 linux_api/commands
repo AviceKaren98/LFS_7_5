@@ -1,0 +1,12 @@
+make mrproper
+
+make headers_check
+time make INSTALL_HDR_PATH=dest headers_install >make.log 2>make_err.log
+{
+real	0m7.366s
+user	0m1.276s
+sys	0m0.760s
+}
+
+find dest/include \( -name .install -o -name ..install.cmd \) -delete
+cp -rv dest/include/* /usr/include

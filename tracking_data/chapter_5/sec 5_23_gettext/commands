@@ -1,0 +1,34 @@
+cd gettext-tools
+EMACS="no" ./configure --prefix=/tools --disable-shared
+
+time make -j4 -C gnulib-lib >make_gnulib.log 2>make_gnulib_err.log
+{
+real	0m16.491s
+user	0m50.280s
+sys	0m2.376s
+}
+time make -j4 -C src msgfmt >make_msgfmt.log 2>make_msgfmt_err.log
+{
+real	0m6.455s
+user	0m19.568s
+sys	0m0.840s
+}
+time make -j4 -C src msgmerge >make_msgmerge.log 2>make_msgmerge_err.log
+{
+real	0m0.925s
+user	0m1.004s
+sys	0m0.072s
+}
+time make -j4 -C src xgettext >make_xgettext.log 2>make_xgettext_err.log
+{
+real	0m3.642s
+user	0m11.708s
+sys	0m0.428s
+}
+
+cp -v src/{msgfmt,msgmerge,xgettext} /tools/bin
+{
+'src/msgfmt' -> '/tools/bin/msgfmt'
+'src/msgmerge' -> '/tools/bin/msgmerge'
+'src/xgettext' -> '/tools/bin/xgettext'
+}

@@ -1,0 +1,41 @@
+if [ ! -r /usr/include/rpc/types.h ]; then
+su -c 'mkdir -pv /usr/include/rpc'
+su -c 'cp -v sunrpc/rpc/*.h /usr/include/rpc'
+fi
+
+mkdir -v ../glibc-build
+cd ../glibc-build
+
+../glibc-2.19/configure \
+--prefix=/tools \
+--host=$LFS_TGT \
+--build=$(../glibc-2.19/scripts/config.guess) \
+--disable-profile \
+--enable-kernel=2.6.32 \
+--with-headers=/tools/include \
+libc_cv_forced_unwind=yes \
+libc_cv_ctors_header=yes \
+libc_cv_c_cleanup=yes
+
+time make -j4 >make.log 2>make_err.log
+{
+real	4m36.702s
+user	11m53.088s
+sys	1m16.708s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	1m18.153s
+user	0m51.764s
+sys	0m3.696s
+}
+
+
+echo 'main(){}' > dummy.c
+$LFS_TGT-gcc dummy.c
+readelf -l a.out | grep ': /tools'
+{
+[Requesting program interpreter: /tools/lib/ld-linux.so.2]
+}
+

@@ -1,0 +1,84 @@
+ln -sv /tools/bin/{bash,cat,echo,pwd,stty} /bin
+{
+'/bin/bash' -> '/tools/bin/bash'
+'/bin/cat' -> '/tools/bin/cat'
+'/bin/echo' -> '/tools/bin/echo'
+'/bin/pwd' -> '/tools/bin/pwd'
+'/bin/stty' -> '/tools/bin/stty'
+}
+
+ln -sv /tools/bin/perl /usr/bin
+{
+'/usr/bin/perl' -> '/tools/bin/perl'
+}
+
+ln -sv /tools/lib/libgcc_s.so{,.1} /usr/lib
+{
+'/usr/lib/libgcc_s.so' -> '/tools/lib/libgcc_s.so'
+'/usr/lib/libgcc_s.so.1' -> '/tools/lib/libgcc_s.so.1'
+}
+
+ln -sv /tools/lib/libstdc++.so{,.6} /usr/lib
+{
+'/usr/lib/libstdc++.so' -> '/tools/lib/libstdc++.so'
+'/usr/lib/libstdc++.so.6' -> '/tools/lib/libstdc++.so.6'
+}
+
+sed 's/tools/usr/' /tools/lib/libstdc++.la > /usr/lib/libstdc++.la
+ln -sv bash /bin/sh
+{
+'/bin/sh' -> 'bash'
+}
+
+ln -sv /proc/self/mounts /etc/mtab
+{
+'/etc/mtab' -> '/proc/self/mounts'
+}
+
+#Creating the /etc/passwd file
+cat > /etc/passwd << "EOF"
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/dev/null:/bin/false
+nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
+EOF
+
+#Creating the /etc/group file
+cat > /etc/group << "EOF"
+root:x:0:
+bin:x:1:
+sys:x:2:
+kmem:x:3:
+tape:x:4:
+tty:x:5:
+daemon:x:6:
+floppy:x:7:
+disk:x:8:
+lp:x:9:
+dialout:x:10:
+audio:x:11:
+video:x:12:
+utmp:x:13:
+usb:x:14:
+cdrom:x:15:
+mail:x:34:
+nogroup:x:99:
+EOF
+
+#Removing the I have no name by executiong a new bash
+exec /tools/bin/bash --login +h
+
+touch /var/log/{btmp,lastlog,wtmp}
+chgrp -v utmp /var/log/lastlog
+{
+changed group of '/var/log/lastlog' from root to utmp
+}
+
+chmod -v 664 /var/log/lastlog
+{
+mode of '/var/log/lastlog' changed from 0644 (rw-r--r--) to 0664 (rw-rw-r--)
+}
+
+chmod -v 600 /var/log/btmp
+{
+mode of '/var/log/btmp' changed from 0644 (rw-r--r--) to 0600 (rw-------)
+}

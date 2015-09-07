@@ -1,0 +1,36 @@
+mkdir -pv $lfs/{dev,proc,sys,run}
+
+mknod -m 600 $lfs/dev/console c 5 1
+mknod -m 666 $lfs/dev/null c 1 3
+
+mount -v --bind /dev $lfs/dev
+{
+/dev on /mnt/lfs/dev type none (rw,bind)
+}
+
+mount -vt devpts devpts $lfs/dev/pts -o gid=5,mode=620
+{
+devpts on /mnt/lfs/dev/pts type devpts (rw,gid=5,mode=620)
+}
+
+mount -vt proc proc $lfs/proc
+{
+proc on /mnt/lfs/proc type proc (rw)
+}
+
+mount -vt sysfs sysfs $lfs/sys
+{
+sysfs on /mnt/lfs/sys type sysfs (rw)
+}
+
+mount -vt tmpfs tmpfs $lfs/run
+{
+tmpfs on /mnt/lfs/run type tmpfs (rw)
+}
+
+if [ -h $lfs/dev/shm ]; then
+mkdir -pv $lfs/$(readlink $lfs/dev/shm)
+fi
+{
+mkdir: created directory '/mnt/lfs//run/shm'
+}

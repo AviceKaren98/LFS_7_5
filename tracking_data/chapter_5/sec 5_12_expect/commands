@@ -1,0 +1,35 @@
+cp -v configure{,.orig}
+{
+'configure' -> 'configure.orig'
+}
+sed 's:/usr/local/bin:/bin:' configure.orig > configure
+
+./configure --prefix=/tools \
+--with-tcl=/tools/lib \
+--with-tclinclude=/tools/include
+
+time make -j4 >make.log 2>make_err.log
+{
+real	0m2.343s
+user	0m7.520s
+sys	0m0.352s
+}
+
+time make install >make_install.log 2>make_install_err.log
+{
+real	0m0.478s
+user	0m0.140s
+sys	0m0.052s
+}
+
+make test >make_test.log
+{
+couldn't open /dev/pts/1: no such file or directorycouldn't open /dev/pts/1: no such file or directorycouldn't open /dev/pts/1: no such file or directoryvia send_stdoutvia send_tty
+}
+
+time make SCRIPTS="" install >make_install.log 2>make_install_err.log
+{
+real	0m0.084s
+user	0m0.008s
+sys	0m0.004s
+}

@@ -1,0 +1,66 @@
+tar -xvf ../udev-lfs-208-3.tar.bz2
+{
+udev-lfs-208-3/
+udev-lfs-208-3/ChangeLog
+udev-lfs-208-3/makefile-incl.gir
+udev-lfs-208-3/83-cdrom-symlinks.rules
+udev-lfs-208-3/udevd.8
+udev-lfs-208-3/README
+udev-lfs-208-3/keyboard-keys-from-name.h
+udev-lfs-208-3/81-cdrom.rules
+udev-lfs-208-3/makefile-incl.gudev
+udev-lfs-208-3/55-lfs.rules
+udev-lfs-208-3/Makefile.lfs
+udev-lfs-208-3/init-net-rules.sh
+udev-lfs-208-3/makefile-incl.keymap
+udev-lfs-208-3/udevadm.8
+udev-lfs-208-3/cfg.h
+udev-lfs-208-3/55-lfs.txt
+udev-lfs-208-3/contrib/
+udev-lfs-208-3/contrib/debian/
+udev-lfs-208-3/contrib/debian/83-cdrom-symlinks.rules
+udev-lfs-208-3/contrib/debian/81-cdrom.rules
+udev-lfs-208-3/contrib/debian/write_cd_aliases
+udev-lfs-208-3/write_cd_rules
+udev-lfs-208-3/rule_generator.functions
+udev-lfs-208-3/keyboard-keys-to-name.h
+udev-lfs-208-3/write_net_rules
+udev-lfs-208-3/udev.7
+}
+
+ln -svf /tools/include/blkid /usr/include
+{
+'/usr/include/blkid' -> '/tools/include/blkid'
+}
+
+ln -svf /tools/include/uuid /usr/include
+{
+'/usr/include/uuid' -> '/tools/include/uuid'
+}
+
+export LD_LIBRARY_PATH=/tools/lib
+
+time make -j4 -f udev-lfs-208-3/Makefile.lfs >make.log 2>make_err.log
+{
+real	0m6.449s
+user	0m21.512s
+sys	0m1.188s
+}
+
+time make -f udev-lfs-208-3/Makefile.lfs install >make_install.log 2>make_install_err.log
+{
+real	0m0.132s
+user	0m0.040s
+sys	0m0.020s
+}
+
+
+build/udevadm hwdb --update
+bash udev-lfs-208-3/init-net-rules.sh
+
+rm -fv /usr/include/{uuid,blkid}
+{
+removed '/usr/include/uuid'
+removed '/usr/include/blkid'
+}
+unset LD_LIBRARY_PATH
